@@ -11,7 +11,12 @@
   "keywords": [],
   "author": "ghqst",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "@lilithmod/unborn-hypixel": "^0.22.0",
+    "lodash.get": "^4.4.2",
+    "numeral": "^2.0.6",
+    "prismarine-chat": "github:lilithmod/prismarine-chat"
+  },
   "devDependencies": {
     "@types/node": "^16.11.6",
     "typescript": "^4.6.2"
