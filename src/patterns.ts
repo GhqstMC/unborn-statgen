@@ -1,9 +1,9 @@
 // const patternsFile = path.join(lilithFolder, 'patterns.yml')
 
-export function pattern(name: string, input: number): string {
+export function pattern(name: keyof typeof patterns, input: number, raw?: string): string {
     // console.log(name)
     // console.log(Object.keys(patterns))
-    return applyPattern((input ?? 0).toString(), patternForValue(input ?? 0, name)) + '&r'
+    return applyPattern(raw != null ? raw : (input ?? 0).toString(), patternForValue(input ?? 0, name)) + '&r'
 }
 
 export function applyPattern(input: string, targetPattern: string): string {
@@ -59,174 +59,57 @@ export function patternForValue(value: number, group: string): string {
 //     pattern: string
 // }>>
 
-const cubelifyTo100kWW = [
-    {
-        threshold: 0,
-        pattern: '&8'
-    },
-    {
-        threshold: 250,
-        pattern: '&7'
-    },
-    {
-        threshold: 500,
-        pattern: '&a'
-    },
-    {
-        threshold: 1000,
-        pattern: '&2'
-    },
-    {
-        threshold: 2500,
-        pattern: '&e'
-    },
-    {
-        threshold: 5000,
-        pattern: '&6'
-    },
-    {
-        threshold: 10000,
-        pattern: '&c'
-    },
-    {
-        threshold: 25000,
-        pattern: '&4'
-    },
-    {
-        threshold: 50000,
-        pattern: '&d'
-    },
-    {
-        threshold: 100000,
-        pattern: '&5'
-    },
-]
-const cubelifyTo200kWW = [
-    {
-        threshold: 0,
-        pattern: '&8'
-    },
-    {
-        threshold: 500,
-        pattern: '&7'
-    },
-    {
-        threshold: 1000,
-        pattern: '&a'
-    },
-    {
-        threshold: 3000,
-        pattern: '&2'
-    },
-    {
-        threshold: 6000,
-        pattern: '&e'
-    },
-    {
-        threshold: 12500,
-        pattern: '&6'
-    },
-    {
-        threshold: 25000,
-        pattern: '&c'
-    },
-    {
-        threshold: 50000,
-        pattern: '&4'
-    },
-    {
-        threshold: 100000,
-        pattern: '&d'
-    },
-    {
-        threshold: 200000,
-        pattern: '&5'
-    },
-]
-const cubelifyTo250kWW = [
-    {
-        threshold: 0,
-        pattern: '&8'
-    },
-    {
-        threshold: 500,
-        pattern: '&7'
-    },
-    {
-        threshold: 1000,
-        pattern: '&a'
-    },
-    {
-        threshold: 2500,
-        pattern: '&2'
-    },
-    {
-        threshold: 5000,
-        pattern: '&e'
-    },
-    {
-        threshold: 10000,
-        pattern: '&6'
-    },
-    {
-        threshold: 25000,
-        pattern: '&c'
-    },
-    {
-        threshold: 50000,
-        pattern: '&4'
-    },
-    {
-        threshold: 100000,
-        pattern: '&d'
-    },
-    {
-        threshold: 250000,
-        pattern: '&5'
-    },
-]
-const cubelifyTo500kWW = [
-    {
-        threshold: 0,
-        pattern: '&8'
-    },
-    {
-        threshold: 1000,
-        pattern: '&7'
-    },
-    {
-        threshold: 2000,
-        pattern: '&a'
-    },
-    {
-        threshold: 6000,
-        pattern: '&2'
-    },
-    {
-        threshold: 12500,
-        pattern: '&e'
-    },
-    {
-        threshold: 25000,
-        pattern: '&6'
-    },
-    {
-        threshold: 50000,
-        pattern: '&c'
-    },
-    {
-        threshold: 100000,
-        pattern: '&4'
-    },
-    {
-        threshold: 250000,
-        pattern: '&d'
-    },
-    {
-        threshold: 500000,
-        pattern: '&5'
-    },
-]
+function getCubelifyPattern(thresholds: number[]) {
+    return [
+        {
+            threshold: thresholds[0],
+            pattern: '&8'
+        },
+        {
+            threshold: thresholds[1],
+            pattern: '&7'
+        },
+        {
+            threshold: thresholds[2],
+            pattern: '&a'
+        },
+        {
+            threshold: thresholds[3],
+            pattern: '&2'
+        },
+        {
+            threshold: thresholds[4],
+            pattern: '&e'
+        },
+        {
+            threshold: thresholds[5],
+            pattern: '&6'
+        },
+        {
+            threshold: thresholds[6],
+            pattern: '&c'
+        },
+        {
+            threshold: thresholds[7],
+            pattern: '&4'
+        },
+        {
+            threshold: thresholds[8],
+            pattern: '&d'
+        },
+        {
+            threshold: thresholds[9],
+            pattern: '&5'
+        },
+    ]
+}
+
+const cubelifyTo25k = getCubelifyPattern([0, 125, 250, 625, 1250, 1875, 3750, 6250, 12500, 25000])
+const cubelifyTo50k = getCubelifyPattern([0, 250, 500, 1250, 2500, 3750, 7500, 12500, 25000, 50000])
+const cubelifyTo100k = getCubelifyPattern([0, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000])
+const cubelifyTo200k = getCubelifyPattern([0, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000, 200000])
+const cubelifyTo250k = getCubelifyPattern([0, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000])
+const cubelifyTo500k = getCubelifyPattern([0, 1000, 2000, 6000, 12500, 25000, 50000, 100000, 250000, 500000])
 
 export let patterns = {
     networkLevel: [
@@ -327,6 +210,7 @@ export let patterns = {
             pattern: '&5'
         },
     ],
+    percentTo100: getCubelifyPattern([0, 10, 20, 30, 40, 50, 60, 70, 80, 90]),
     // duels
     duelsWinsOrLosses: [
         {
@@ -760,6 +644,7 @@ export let patterns = {
             pattern: '&c&6&e&a&b&d&5'
         },
     ],
+    bridgeGoals: cubelifyTo100k,
     // bedwars
     bedwarsWinsOrLosses: [
         {
@@ -1350,9 +1235,10 @@ export let patterns = {
             pattern: '&5'
         },
     ],
-    skywarsGamesPlayed: cubelifyTo100kWW,
+    skywarsGamesPlayed: cubelifyTo100k,
+    skywarsPlaytime: getCubelifyPattern([0, 5, 10, 100, 250, 500, 750, 1000, 2000, 5000]),
     // wool wars
-    woolWarsWinsOrLosses: cubelifyTo100kWW,
+    woolWarsWinsOrLosses: cubelifyTo100k,
     woolWarsWLR: [
         {
             threshold: 0,
@@ -1395,7 +1281,7 @@ export let patterns = {
             pattern: '&5'
         },
     ],
-    woolWarsKillsOrDeaths: cubelifyTo200kWW,
+    woolWarsKillsOrDeaths: cubelifyTo200k,
     woolWarsKDR: [
         {
             threshold: 0,
@@ -1438,10 +1324,20 @@ export let patterns = {
             pattern: '&5'
         },
     ],
-    woolWarsPowerups: cubelifyTo250kWW,
-    woolWarsAssists: cubelifyTo500kWW,
-    woolWarsGamesPlayed: cubelifyTo250kWW,
-    woolWarsBlocksBroken: cubelifyTo500kWW,
-    woolWarsWoolPlaced: cubelifyTo500kWW,
-    woolWarsCoins: cubelifyTo250kWW
+    woolWarsPowerups: cubelifyTo250k,
+    woolWarsAssists: cubelifyTo500k,
+    woolWarsGamesPlayed: cubelifyTo250k,
+    woolWarsBlocksBroken: cubelifyTo500k,
+    woolWarsWoolPlaced: cubelifyTo500k,
+    woolWarsCoins: cubelifyTo250k,
+    // murder mystery
+    murderMysteryWins: cubelifyTo50k,
+    murderMysteryGamesPlayed: getCubelifyPattern([0, 300, 600, 1500, 3000, 4500, 9000, 15000, 30000, 60000]),
+    murderMysteryBowKills: cubelifyTo50k,
+    murderMysteryGoldPickedUp: cubelifyTo250k,
+    murderMysteryRoleWins: getCubelifyPattern([0, 62, 125, 312, 625, 937, 1875, 3125, 6250, 12500]),
+    murderMysteryKillsOrDeaths: cubelifyTo100k,
+    murderMysteryTrapKills: cubelifyTo25k,
+    murderMysteryMurdererKills: cubelifyTo50k,
+    murderMysteryThrownKnifeKills: cubelifyTo25k
 }
